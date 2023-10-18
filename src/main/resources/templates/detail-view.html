@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout-simple}">
+<head>
+    <meta charset="utf-8">
+    <title>Detalles Produccion</title>
+    <meta name="description" content="HTML5">
+    <link rel="stylesheet" type="text/css" href="/css/detail.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+<section layout:fragment="content">
+    <div class="caja1">
+        <h1><span th:text="${produccion.titulo}"></span></h1>
+    </div>
+    <div class="contenedor">
+        <div class="caja2">
+            <img class="portada"
+                 th:src="${produccion.portada}" onerror="this.src='/img/no_disponible.png'">
+            <form method="post" action="/actualizar-produccion" th:if="${valoracion == null}">
+                <div class="errors" th:if="${errors}">
+                    <p th:each="item: ${errors}">
+                        <strong th:text="${item.key}"></strong>:
+                        <span th:text="${item.value}"></span>
+                    </p>
+                </div>
+                <div class="valoracion">
+                    <br><br>
+                    <label>
+                        <input type="radio" name="valoracion" value="1"><span>1</span>
+                    </label>
+                    <label>
+                        <input type="radio" name="valoracion" value="2"><span>2</span>
+                    </label>
+                    <label>
+                        <input type="radio" name="valoracion" value="3"><span>3</span>
+                    </label>
+                    <label>
+                        <input type="radio" name="valoracion" value="4"><span>4</span>
+                    </label>
+                    <label>
+                        <input type="radio" name="valoracion" value="5"><span>5</span>
+                    </label>
+                    <input type="hidden" name="idProduccion" th:value="${produccion.getId()}">
+                    <input type="text" name="mensaje" placeholder="Escribe un comentario">
+                    <button type="submit" name="valoracion">Valoración</button>
+                </div>
+            </form>
+            <div class="comentario-valoracion" th:unless="${valoracion == null}">
+                <div class="comentario">
+                <p th:text="${valoracion.getComentario()}"></p>
+                </div>
+                <div class="estrellas">
+                        <img th:each="i: ${#numbers.sequence(1, valoracion.getValoracion())}" src="/img/Estrella.png" class="estrellas">
+                </div>
+            </div>
+        </div>
+
+        <div class="caja3">
+            <article><span th:text="${produccion.guion}"></span>
+                <div class="datos">
+                    <p><strong>Fecha de Lanzamiento: </strong><span th:text="${produccion.getFechaLanzamientoString()}"></span></p>
+                    <div th:if="${esSerie}">
+                        <strong>Temporadas: </strong><a th:text="${serie.temporadas.size()}"></a>
+                    </div>
+                    <div th:if="${esSerie}">
+                    <ul th:each="item: ${serie.getTemporadas()}">
+                    <li><a th:href="@{/detalles-temporada(idSerie=${serie.getId()},idTemporada=${item.getIdTemporada()})}" th:text="${item.getTemporadaFormat()}"></a></li>
+                    </ul>
+                </div>
+                </span>
+                        <span th:unless="${esSerie}" th:text="|Duración: ${produccion.duracion} minutos|"></span></p>
+                    <p><strong>Género: </strong><span th:each="a,item: ${produccion.genero}" th:text="${!item.last} ? ${a} + ', ': ${a}"></span></p>
+                    <p><strong>Actores: </strong><span th:each="a,item: ${produccion.actores}" th:text="${!item.last} ? ${a.nombre} + ', ': ${a.nombre}"></span></p>
+                    <p><strong>Director: </strong><span th:text="${produccion.director.nombre}"></span></p>
+                    <p><strong>Productora: </strong><span th:text="${produccion.productor.nombre}"></span></p>
+                    <div th:if="${produccion.getCalificacion().toString().equalsIgnoreCase('R')}">
+                        <p><strong>Calificación: </strong><img class="calificacion" src="/img/diecisieteAños.png"></p>
+                    </div>
+                    <div th:if="${produccion.getCalificacion().toString().equalsIgnoreCase('PG-13') || produccion.getCalificacion().toString().equalsIgnoreCase('PG')}">
+                        <p><strong>Calificación: </strong><img class="calificacion" src="/img/treceAnos.png"></p>
+                    </div>
+                    <div th:if="${produccion.getCalificacion().toString().equalsIgnoreCase('X')}">
+                        <p><strong>Calificación: </strong><img class="calificacion" src="/img/dieciocho.png"></p>
+                    </div>
+                    <div th:if="${produccion.getCalificacion().toString().equalsIgnoreCase('G')}">
+                        <p><strong>Calificación: </strong><img class="calificacion" src="/img/todoElPublico.png"></p>
+                    </div>
+                    <p><strong>Web: </strong><a th:href="${produccion.web}" th:text="${produccion.web}"></a></p>
+                    <label><strong>Plataformas disponibles: </strong><br> <a th:each="item: ${produccion.plataformas}" th:href="${item.web}">
+                        <img class="plataformas"  th:src="${item.getIcono()}" onerror="this.src='/img/no_disponible.png'">
+                    </a>
+                    </label>
+                </div>
+                <div class="errors" th:if="${errorsFavoritos}">
+                    <p th:each="item: ${errorsFavoritos}">
+                        <strong th:text="${item.key}"></strong>:
+                        <span th:text="${item.value}"></span>
+                    </p>
+                </div>
+                <div class="favorito" th:if="${favorito}">
+                    <a th:href="@{/favorito(idProduccion=${produccion.getId()})}">
+                        <button class="favorite-button-active"></button>
+                    </a>
+                </div>
+                <div class="favorito" th:unless="${favorito}">
+                    <a th:href="@{/favorito(idProduccion=${produccion.getId()})}">
+                        <button class="favorite-button-desactive"></button>
+                    </a>
+                </div>
+            </article>
+        </div>
+    </div>
+    <div class="carousel">
+        <h2 class="carousel-title">Peliculas relacionadas</h2>
+        <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                <div class="carousel-item" th:each="item: ${peliculas}">
+                    <a th:href="@{/detalles-produccion(idProduccion=${item.getId()})}">
+                        <img th:src="${item.getPortada()}" onerror="this.src='/img/no_disponible.png'" alt="Image">
+                    </a>
+                </div>
+            </div>
+            <button class="prev-button"><i class="fas fa-chevron-left"></i></button>
+            <button class="next-button"><i class="fas fa-chevron-right"></i></button>
+        </div>
+    </div>
+    <script src="/js/carusel.js"></script>
+</section>
+</body>

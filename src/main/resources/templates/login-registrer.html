@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Registrarse - Inicio sesión</title>
+  <link rel="stylesheet" type="text/css" href="/css/login.css">
+  <link href="https://fonts.googleapis.com/css2?family=Jost:wght@500&display=swap" rel="stylesheet">
+
+</head>
+<body>
+<div class="errors" th:if="${errores}">
+  <p th:each="item: ${errores}">
+    <strong th:text="${item.key}"></strong>:
+    <span th:text="${item.value}"></span><br>
+  </p>
+</div>
+<div class="main">
+  <input type="checkbox" id="chk" aria-hidden="true">
+  <div class="signup">
+    <form th:action="@{/registrer-usuario}" method="post">
+      <label for="chk" aria-hidden="true">Registrarse</label>
+      <input type="text" name="nombre" id="nombre" placeholder="Nombre">
+      <input type="text" name="apellidos" id="apellidos" placeholder="Apellidos">
+      <input type="email" name="email" id="email" placeholder="Email">
+      <input type="password" name="password" id="password" placeholder="Contraseña">
+      <button>Sign up</button>
+    </form>
+  </div>
+  <div class="login">
+    <form th:action="@{/login-usuario}" method="post">
+      <label for="chk" aria-hidden="true">Inicio sesión</label>
+      <input type="email" name="email-login" placeholder="Email">
+      <input type="password" name="password-login" placeholder="Contraseña">
+      <div class="registro" th:if="${registro}">
+        <p th:each="item: ${registro}">
+          <strong th:text="${item.value}"></strong>
+        </p>
+      </div>
+      <button>Login</button>
+    </form>
+  </div>
+</div>
+</body>
+<script>
+  var urlParams = new URLSearchParams(window.location.search);
+  var mode = urlParams.get('mode');
+  var chk = document.getElementById('chk');
+  var signupLabel = document.querySelector('.signup label');
+  var loginLabel = document.getElementById('loginLabel');
+  var loginForm = document.querySelector('.login form');
+
+  if (mode === 'login') {
+    chk.checked = true;
+    signupLabel.style.transform = 'scale(.6)';
+    loginLabel.style.pointerEvents = 'none';
+    loginForm.style.opacity = '0.5';
+    loginForm.style.pointerEvents = 'none';
+  }
+
+  chk.addEventListener('change', function() {
+    if (this.checked) {
+      signupLabel.style.transform = 'scale(.6)';
+      loginLabel.style.pointerEvents = 'none';
+      loginForm.style.opacity = '0.5';
+      loginForm.style.pointerEvents = 'none';
+    } else {
+      signupLabel.style.transform = 'scale(1)';
+      loginLabel.style.pointerEvents = 'auto';
+      loginForm.style.opacity = '1';
+      loginForm.style.pointerEvents = 'auto';
+    }
+  });
+</script>
+</html>

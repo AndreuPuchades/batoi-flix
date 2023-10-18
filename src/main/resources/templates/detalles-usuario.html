@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layouts/layout-simple}">
+<head>
+  <meta charset="utf-8">
+  <title>Detalles Usuario</title>
+  <meta name="description" content="HTML5">
+  <link rel="stylesheet" type="text/css" href="/css/detallesUsuario.css">
+
+</head>
+<body>
+<section layout:fragment="content">
+  <div class="encuesta">
+    <div class="main">
+      <div class="form-inline">
+        <label for="nombre">Nombre:</label>
+        <input id="nombre" th:value="${usuario.getNombre()}" readonly><br>
+      </div>
+      <div class="form-inline">
+        <label for="apellidos">Apellidos:</label>
+        <input id="apellidos" th:value="${usuario.getApellidos()}" readonly><br>
+      </div>
+      <div class="form-inline">
+        <label for="email">Email:</label>
+        <input id="email" th:value="${usuario.getEmail()}" readonly><br>
+      </div>
+      <div class="form-inline">
+        <label for="tipoUsuario">Tipo de usuario:</label>
+        <input id="tipoUsuario" th:value="${usuario.getTipoUsuario().toString()}" readonly><br>
+      </div>
+      <button class="editar" onclick="location.href='/editar-usuario'">Editar</button>
+    </div>
+  </div>
+</section>
+</body>
+</html>

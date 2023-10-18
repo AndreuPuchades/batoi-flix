@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout-con-busqueda}">
+	<head>
+		<meta charset="utf-8">
+		<title>Vista principal</title>
+		<meta name="description" content="HTML">
+		<meta name="author" content="Arantxa">
+        <link rel="stylesheet" type="text/css" href="/css/principal.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+	</head>
+    <body>
+    <section layout:fragment="content">
+        <div class="container">
+        <h2 class="carousel-title">MÁS RECOMENDADAS</h2>
+        <div id="carouselExampleControls2" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                <div class="carousel-item" th:each="item: ${recomendadas}">
+                    <a th:href="@{/detalles-produccion(idProduccion=${item.getId()})}">
+                        <img th:src="${item.getPortada()}" onerror="this.src='/img/no_disponible.png'">
+                    </a>
+                    <span th:text="${item.titulo}"></span>
+                </div>
+            </div>
+            <button class="prev-button"><i class="fas fa-chevron-left"></i></button>
+            <button class="next-button"><i class="fas fa-chevron-right"></i></button>
+        </div>
+        <h2 class="carousel-title">PELÍCULAS</h2>
+        <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                <div class="carousel-item" th:each="item: ${peliculas}">
+                    <a th:href="@{/detalles-produccion(idProduccion=${item.getId()})}">
+                        <img th:src="${item.getPortada()}" onerror="this.src='/no_disponible.png'">
+                    </a>
+                    <span th:text="${item.titulo}"></span>
+                </div>
+                <div class="carousel-boton" th:if="${masPelis}">
+                    <a th:href="@{/(pagePel=${numPagPel+1})}" th:with="numPag=${numPag}">VER MAS PELICULAS</a>
+                </div>
+            </div>
+            <button class="prev-button"><i class="fas fa-chevron-left"></i></button>
+            <button class="next-button"><i class="fas fa-chevron-right"></i></button>
+        </div>
+        <h2 class="carousel-title">SERIES</h2>
+        <div id="carouselExampleControls1" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                <div class="carousel-item" th:each="item: ${series}">
+                    <a th:href="@{/detalles-produccion(idProduccion=${item.getId()})}">
+                        <img th:src="${item.getPortada()}" onerror="this.src='/img/no_disponible.png'">
+                    </a>
+                    <span th:text="${item.titulo}"></span>
+                </div>
+                <div class="carousel-boton" th:if="${masSeries}">
+                    <a th:href="@{/(pageSer=${numPagSer+1})}" th:with="numPag=${numPag}">VER MAS SERIES</a>
+                </div>
+            </div>
+            <button class="prev-button"><i class="fas fa-chevron-left"></i></button>
+            <button class="next-button"><i class="fas fa-chevron-right"></i></button>
+        </div>
+        <script src="/js/carusel.js"></script>
+        <script>
+            var generoSelect = document.getElementById("fechaSelect");
+            generoSelect.addEventListener("change", function() {
+                document.getElementById("searchForm").submit();
+            });
+        </script>
+        </div>
+    </section>
+    </body>
+</html>

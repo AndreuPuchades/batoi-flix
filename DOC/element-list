@@ -1,0 +1,12 @@
+com.example.batoiflix
+com.example.batoiflix.exceptions
+com.example.batoiflix.modelo.controladores
+com.example.batoiflix.modelo.dao
+com.example.batoiflix.modelo.dao.interfaces
+com.example.batoiflix.modelo.entities
+com.example.batoiflix.modelo.enums
+com.example.batoiflix.modelo.repositorios
+com.example.batoiflix.services
+com.example.batoiflix.utils
+com.example.batoiflix.utils.database
+com.example.batoiflix.workers

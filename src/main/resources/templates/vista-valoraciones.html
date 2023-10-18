@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout-simple}">
+<head>
+  <title>Lista Valoraciones</title>
+  <link rel="stylesheet" type="text/css" href="/css/valoraciones.css">
+</head>
+<body>
+<section layout:fragment="content">
+  <div th:if="${valoraciones.size() > 0}">
+    <h1>Todas Mis Valoraciones</h1>
+  </div>
+  <div th:unless="${valoraciones.size() > 0}">
+    <h1>No Tienes Niguna Valoración</h1>
+  </div>
+  <div th:each="item:${valoraciones}" class="valoracion">
+    <a th:href="@{/detalles-produccion(idProduccion=${item.getProduccion().getId()})}"><h2 th:text="${item.getProduccion().getTitulo()}"></h2></a>
+    <div class="estrellas">
+      <img th:each="i: ${#numbers.sequence(1, item.getValoracion())}" src="/img/Estrella.png" class="estrellas">
+    </div>
+    <div class="comentario">
+      <p th:text="${item.getComentario()}"></p>
+    </div>
+    <a th:href="@{/eliminar-valoracion(idProduccion=${item.getProduccion().getId()})}">
+      <img src="/img/Eliminar.png" class="eliminar">
+    </a>
+
+  </div>
+</section>
+</body>
+</html>

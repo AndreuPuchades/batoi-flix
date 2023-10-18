@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout-simple}">
+<head>
+    <meta charset="UTF-8">
+    <title>Lista Favoritos</title>
+    <link rel="stylesheet" type="text/css" href="/css/favoritos.css">
+</head>
+<body>
+<section layout:fragment="content">
+    <div class="titulo" th:if="${producciones.size() > 0}">
+        <h1>Mis Favoritos</h1>
+    </div>
+    <div class="titulo" th:unless="${producciones.size() > 0}">
+        <h1>No Tienes Favoritos</h1>
+    </div>
+    <div class="">
+    </div>
+    <div class="gallery">
+        <div th:each="item:${producciones}">
+            <a class="borrar" th:href="@{/eliminar-favorito(idProduccion=${item.getId()})}">
+                <img src="/img/Borrar.png" alt="Image 2">
+            </a>
+            <div class="imagen">
+                <a  th:href="@{/detalles-produccion(idProduccion=${item.getId()})}">
+                    <img class="portada" th:src="${item.getPortada()}" onerror="this.src='/img/no_disponible.png'" alt="Image">
+                </a>
+                <span th:text="${item.titulo}"></span>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>

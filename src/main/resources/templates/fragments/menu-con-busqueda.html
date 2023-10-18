@@ -1,0 +1,164 @@
+<header>
+  <div class="banner">
+    <div class="banner-top">
+    <a href="/" class="logo-link">
+      <h1 class="logo">BATOIFLIX</h1>
+    </a>
+      <div class="search-container">
+        <form action="/busqueda" method="get">
+          <input type="text" class="buscar" name="buscador" id="buscador" placeholder=" ">
+          <select id="generoSelect" name="genero">
+            <option value="">Seleccionar género</option>
+            <option th:each="item : ${generos}" th:value="${item.toString()}" th:text="${item.toString()}"></option>
+          </select>
+        </form>
+      </div>
+    </div>
+    <div class="seleccion">
+    <div class="boton-fecha">
+      <form action="/ordenar" method="get">
+        <select id="fechaSelect" name="fecha">
+          <option value="">Ordenar por</option>
+          <option th:value="${'ASC'}">Antiguas primero</option>
+          <option th:value="${'DESC'}">Actuales primero</option>
+        </select>
+        <button type="submit" value="Buscar">Ordenar</button>
+      </form>
+    </div>
+      <div class="boton-tipo">
+      <button th:onclick="|location.href='@{/busqueda(type='pelis')}'|">Películas</button>
+      <button th:onclick="|location.href='@{/busqueda(type='series')}'|">Series</button>
+      </div>
+    </div>
+
+    <div class="opciones-usuario" th:if="${usuario != null}">
+      <div class="dropdown">
+        <nav>
+          <label for="touch"><span th:text="${usuario.getNombre()}"></span></label>
+          <input type="checkbox" id="touch">
+          <ul class="slide">
+            <li><a href="/detalles-usuario">Perfil</a></li>
+            <li><a href="/lista-favoritos">Mis Favoritos</a></li>
+            <li><a href="/lista-valoraciones">Mis Valoraciones</a></li>
+            <li><a href="/logout">Salir</a></li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+    <div class="opciones-usuario" th:unless="${usuario != null}" >
+      <a href="/login" class="cta">
+        <span>Login/Registrate</span>
+        <svg width="13px" height="10px" viewBox="0 0 13 10">
+          <path d="M1,5 L11,5"></path>
+          <polyline points="8 1 12 5 8 9"></polyline>
+        </svg>
+      </a>
+    </div>
+    <div class="menu">
+    <button class="menu-btn">
+      <i class="fa-solid fa-bars"></i>
+    </button>
+    <nav class="header-menu">
+      <ul>
+        <li th:if="${usuario == null}">
+          <a href="/login">Login/Registro</a>
+        </li>
+        <li th:unless="${usuario == null}" class="dropdown-menu">
+          <a href="#" class="dropdown-toggle">
+            <span th:text="${usuario.getNombre()}"></span>
+          </a>
+          <ul class="slide-menu">
+            <li><a href="/detalles-usuario">Perfil</a></li>
+            <li><a href="/lista-favoritos">Favoritos</a></li>
+            <li><a href="/lista-valoraciones">Valoraciones</a></li>
+            <li><a href="/logout">Salir</a></li>
+          </ul>
+        </li>
+        <li class="dropdown-menu-filtrar">
+          <a href="#" class="dropdown-toggle">Filtros</a>
+          <ul class="slide-menu">
+            <li>
+              <a th:href="@{/busqueda(type='pelis')}">Películas</a>
+            </li>
+            <li>
+              <a th:href="@{/busqueda(type='series')}">Series</a>
+            </li>
+          </ul>
+        </li>
+        <li class="dropdown-menu-ordenar">
+          <a href="#" class="dropdown-toggle">Ordenar</a>
+          <ul class="slide-menu">
+            <li>
+              <form action="/ordenar" method="get">
+                <select id="fechaSelect" name="fecha">
+                  <option value="">Ordenar por</option>
+                  <option th:value="${'ASC'}">Antiguas primero</option>
+                  <option th:value="${'DESC'}">Actuales primero</option>
+                </select>
+                <button type="submit" value="Buscar">Ordenar</button>
+              </form>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </nav>
+    </div>
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        const headerBtn = document.querySelector('.menu-btn');
+        const headerMenu = document.querySelector('.header-menu');
+        const dropdownToggle = document.querySelectorAll('.dropdown-toggle');
+        const dropdownMenus = document.querySelectorAll('.slide-menu');
+
+        dropdownMenus.forEach(function(menu) {
+          menu.style.display = 'none';
+        });
+
+        headerBtn.addEventListener('click', function() {
+          if (headerMenu.style.display !== 'block') {
+            headerMenu.style.display = 'block';
+            headerBtn.innerHTML = '<i class="fa-solid fa-xmark"></i>'
+            dropdownMenus.forEach(function(menu) {
+              menu.style.display = 'none';
+            });
+          } else {
+            headerMenu.style.display = 'none';
+            headerBtn.innerHTML = '<i class="fa-solid fa-bars"></i>'
+          }
+        });
+
+        dropdownToggle.forEach(function(toggle) {
+          toggle.addEventListener('click', function(e) {
+            e.preventDefault();
+            const dropdownMenu = this.nextElementSibling;
+
+            dropdownMenus.forEach(function(menu) {
+              if (menu !== dropdownMenu) {
+                menu.style.display = 'none';
+              }
+            });
+
+            if (dropdownMenu.style.display !== 'block') {
+              dropdownMenu.style.display = 'block';
+            } else {
+              dropdownMenu.style.display = 'none';
+            }
+          });
+        });
+
+        document.addEventListener('click', function(e) {
+          const target = e.target;
+          if (dropdownMenus.length > 0) {
+            dropdownMenus.forEach(function(menu) {
+              const parentLi = menu.closest('li.dropdown-menu');
+              if (parentLi !== null && !parentLi.contains(target)) {
+                menu.style.display = 'none';
+              }
+            });
+          }
+
+        });
+      });
+    </script>
+</div>
+</header>

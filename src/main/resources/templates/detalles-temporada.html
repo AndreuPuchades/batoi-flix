@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout-simple}">
+<head>
+    <meta charset="utf-8">
+    <title>Detalles Temporada</title>
+    <meta name="description" content="HTML5">
+    <link rel="stylesheet" type="text/css" href="/css/temporada.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+<section layout:fragment="content">
+    <title>Detalles Temporada</title>
+    <meta name="description" content="HTML5">
+    <link rel="stylesheet" type="text/css" href="/css/detail.css">
+<div class="caja1">
+    <h1><span th:text="${temporada.serie.titulo}"></span></h1>
+</div>
+<div class="contenedor">
+    <div class="caja2">
+        <img class="portada"
+             th:src="${temporada.serie.portada}" onerror="this.src='/img/no_disponible.png'">
+    </div>
+    <div class="caja3">
+        <article><span th:text="${temporada.guion}"></span>
+            <div class="datos">
+                <p><strong>Temporada: </strong><span th:text="${temporada.idTemporada}"></span>
+                <p><strong>Capítulos: </strong><span th:text="${temporada.capitulos}"></span></p>
+                <div th:if="${produccion.getCalificacion().toString().equalsIgnoreCase('R') || produccion.getCalificacion().toString().equalsIgnoreCase('X')}">
+                    <p><strong>Calificación: </strong><img class="calificacion" src="/img/diecisieteAños.png"></p>
+                </div>
+                <div th:if="${produccion.getCalificacion().toString().equalsIgnoreCase('PG-13')}">
+                    <p><strong>Calificación: </strong><img class="calificacion" src="/img/treceAnos.png"></p>
+                </div>
+                <div th:if="${produccion.getCalificacion().toString().equalsIgnoreCase('PG')}">
+                    <p><strong>Calificación: </strong><img class="calificacion" src="/img/dieciocho.png"></p>
+                </div>
+                <div th:if="${produccion.getCalificacion().toString().equalsIgnoreCase('G')}">
+                    <p><strong>Calificación: </strong><img class="calificacion" src="/img/todoElPublico.png"></p>
+                </div>
+                <p><strong>Año de Lanzamiento: </strong><span th:text="${temporada.anyoLanzamiento}"></span></p>
+                <p><strong>Género: </strong><span th:each="a,item: ${temporada.serie.genero}" th:text="${!item.last} ? ${a} + ', ': ${a}"></span></p>
+                <p><strong>Director: </strong><span th:text="${temporada.serie.director.nombre}"></span></p>
+                <p><strong>Productora: </strong><span th:text="${temporada.serie.productor.nombre}"></span></p>
+                <p><strong>Web: </strong><a th:href="${temporada.serie.web}" th:text="${temporada.serie.web}"></a></p>
+                <label><strong>Plataformas disponibles: </strong><br> <a th:each="item: ${temporada.serie.plataformas}" th:href="${item.web}">
+                    <img class="plataformas"  th:src="${item.icono}" onerror="this.src='/img/no_disponible.png'">
+                </a>
+                </label>
+            </div>
+        </article>
+    </div>
+</div>
+<div class="carousel">
+    <h2 class="carousel-title">Más Series</h2>
+    <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+            <div class="carousel-item" th:each="item: ${series}">
+                <a th:href="@{/detalles-produccion(idProduccion=${item.id})}">
+                    <img th:src="${item.getPortada()}" alt="Image" onerror="this.src='/img/no_disponible.png'">
+                </a>
+            </div>
+        </div>
+        <button class="prev-button"><i class="fas fa-chevron-left"></i></button>
+        <button class="next-button"><i class="fas fa-chevron-right"></i></button>
+    </div>
+</div>
+<script src="/js/carusel.js"></script>
+</section>
+</body>
+</html>

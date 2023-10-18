@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout-simple}">
+<head>
+    <meta charset="utf-8">
+    <title>Editar Usuario</title>
+    <meta name="description" content="HTML5">
+    <link rel="stylesheet" type="text/css" href="/css/editarUsuario.css">
+</head>
+<body>
+<section layout:fragment="content">
+    <div class="errors" th:if="${errores}">
+        <p th:each="item: ${errores}">
+            <strong th:text="${item.key}"></strong>:
+            <span th:text="${item.value}"></span><br>
+        </p>
+    </div>
+    <div class="encuesta">
+        <div class="main">
+            <form action="/cambiar-contraseña" method="post">
+                <a>Nombre: </a><input type="text" id="nombre" name="nombre" th:value="${usuario.getNombre()}"><br>
+                <a>Apellidos: </a><input type="text" id="apellidos" name="apellidos" th:value="${usuario.getApellidos()}"><br>
+                <a>Email: </a><input type="email" id="email" name="email" th:value="${usuario.getEmail()}" readonly><br>
+                <a>Nueva Contraseña: </a><input type="password" id="contrasenyaNueva" name="contrasenyaNueva"><br>
+                <a>Repite la Contraseña: </a><input type="password" id="contrasenyaNueva2" name="contrasenyaNueva2"><br>
+                <a>Contraseña Antigua: </a><input type="password" id="contrasenyaAntigua" name="contrasenyaAntigua"><br>
+                <button type="submit" class="submit">Guardar</button>
+            </form>
+        </div>
+    </div>
+</section>
+</body>
+</html>

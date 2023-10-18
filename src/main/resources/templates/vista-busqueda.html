@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout-simple}">
+<head>
+    <meta charset="UTF-8">
+    <title>Resultados búsqueda</title>
+    <link rel="stylesheet" type="text/css" href="/css/busqueda.css">
+</head>
+<body>
+<section layout:fragment="content">
+    <div class="titulo">
+        <h4>Resultado de la búsqueda</h4>
+    </div>
+    <div class="gallery">
+        <div class="image" th:each="item:${producciones}" th:if="${producciones.size() > 0}">
+            <a th:href="@{/detalles-produccion(idProduccion=${item.getId()})}">
+                <img th:src="${item.getPortada()}" onerror="this.src='/img/no_disponible.png'">
+            </a>
+            <span th:text="${item.titulo}"></span>
+        </div>
+        <div th:unless="${producciones.size() > 0}">
+            <h4>No hay resultados de búsqueda</h4>
+        </div>
+        <div class="boton-mas" th:unless="${!boton and page == 1}">
+            <div th:with="urlBuilder=${T(org.springframework.web.servlet.support.ServletUriComponentsBuilder)}">
+                <a th:if="${page} > 1" th:href="${urlBuilder.fromCurrentRequest().replaceQueryParam('page', page - 1).toUriString()}">Anterior</a>
+                <a th:href="${urlBuilder.fromCurrentRequest().replaceQueryParam('page', page + 1).toUriString()}" th:unless="${!boton}">Siguiente</a>
+            </div>
+        </div>
+
+    </div>
+</section>
+</body>
+</html>
